@@ -1,40 +1,211 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Wedding Invitation</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-
-<style>
+<title>Wedding Invitation</title><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400&display=swap" rel="stylesheet"><style>
 
 body{
 margin:0;
 font-family:'Poppins',sans-serif;
-background:#6f866f;
-color:white;
+color:#333;
 text-align:center;
+
+/* TOILE BACKGROUND */
+background-color:#f8f6f1;
+background-image:url('https://www.transparenttextures.com/patterns/french-toile.png');
+background-size:400px;
 }
 
 .container{
-max-width:500px;
+max-width:520px;
 margin:auto;
-padding:30px;
+padding:20px;
 }
 
 .card{
-background:white;
-color:#333;
-padding:40px;
+background:rgba(255,255,255,0.95);
+backdrop-filter:blur(6px);
+padding:35px;
 border-radius:20px;
-box-shadow:0 15px 40px rgba(0,0,0,0.2);
+box-shadow:0 20px 50px rgba(0,0,0,0.15);
+margin-top:20px;
 }
 
 h1{
 font-family:'Playfair Display',serif;
+color:#6f866f;
+font-size:38px;
+}
+
+h2{
+color:#6f866f;
+}
+
+button{
+padding:12px 28px;
+border:none;
+background:#d4af37;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+font-size:15px;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* FLOWER */
+.flower{
+position:fixed;
+top:-20px;
+font-size:18px;
+animation:fall linear forwards;
+}
+@keyframes fall{
+0%{transform:translateY(-20px) rotate(0deg);}
+100%{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* SLIDER */
+.slider{
+display:flex;
+overflow-x:auto;
+gap:10px;
+padding:10px;
+}
+
+.slider img{
+height:180px;
+border-radius:12px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.slider img:hover{
+transform:scale(1.05);
+}
+
+/* MODAL */
+#modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+}
+
+#modal img{
+max-width:90%;
+max-height:90%;
+border-radius:12px;
+}
+
+.fade{
+opacity:0;
+transform:translateY(30px);
+transition:1s;
+}
+
+.fade.show{
+opacity:1;
+transform:translateY(0);
+}
+
+</style></head><body><audio id="musik" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9b1c62b8c2.mp3">
+</audio><div class="container"><div class="card" id="cover">
+<p id="guest"></p>
+<h1>The Wedding Of</h1>
+<h2>Syukran Mudawali</h2>
+<p>&</p>
+<h2>Nadia Putri Balqis</h2>
+<p>03 April 2026</p>
+<button onclick="bukaUndangan()">Buka Undangan</button>
+</div><div id="isiUndangan" style="display:none"><div class="card fade">
+<h2>Akad Nikah</h2>
+<p>Jum'at, 03 April 2026</p>
+<p>09:00 WIB</p><h2>Resepsi</h2>
+<p>11:00 WIB</p>
+<p>Mesjid Babah Chik Kajhu</p>
+</div><div class="card fade">
+<h2>Menuju Hari Bahagia</h2>
+<p id="countdown"></p>
+</div><div class="card fade">
+<h2>Galeri</h2>
+<div class="slider">
+<img src="foto1.jpg" onclick="openModal(this)">
+<img src="foto2.jpg" onclick="openModal(this)">
+<img src="foto3.jpg" onclick="openModal(this)">
+</div>
+</div><div class="card fade">
+<h2>Lokasi</h2>
+<a href="https://maps.google.com/?q=Banda+Aceh" target="_blank">
+<button>Lihat Lokasi</button>
+</a>
+</div></div>
+</div><div id="modal" onclick="closeModal()">
+<img id="modalImg">
+</div><script>
+
+function bukaUndangan(){
+document.getElementById("cover").style.display="none";
+document.getElementById("isiUndangan").style.display="block";
+document.getElementById("musik").play();
+}
+
+const tgl=new Date("April 3, 2026 09:00:00").getTime();
+setInterval(()=>{
+let now=new Date().getTime();
+let d=tgl-now;
+let hari=Math.floor(d/(1000*60*60*24));
+let jam=Math.floor((d%(1000*60*60*24))/(1000*60*60));
+let menit=Math.floor((d%(1000*60*60))/(1000*60));
+document.getElementById("countdown").innerHTML=
+hari+" Hari "+jam+" Jam "+menit+" Menit";
+},1000);
+
+setInterval(()=>{
+let f=document.createElement("div");
+f.className="flower";
+f.innerHTML="🌸";
+f.style.left=Math.random()*100+"vw";
+f.style.animationDuration=(Math.random()*5+5)+"s";
+document.body.appendChild(f);
+setTimeout(()=>f.remove(),10000);
+},800);
+
+function openModal(img){
+document.getElementById("modal").style.display="flex";
+document.getElementById("modalImg").src=img.src;
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
+}
+
+const params=new URLSearchParams(window.location.search);
+const nama=params.get("to");
+if(nama){
+document.getElementById("guest").innerHTML="Kepada Yth: "+nama;
+}
+
+const faders=document.querySelectorAll(".fade");
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){entry.target.classList.add("show");}
+});
+});
+faders.forEach(el=>observer.observe(el));
+
+</script></body>
+</html>font-family:'Playfair Display',serif;
 color:#6f866f;
 font-size:40px;
 }
